@@ -22,7 +22,7 @@ router.get('/scrape', function(req, res) {
 	
     // Grab the body of the html with request
     		
-		request('https://www.wired.com/most-recent/', function(error, response, html) {
+		request('https://www.nytimes.com/', function(error, response, html) {
 		
     // Load this into cheerio and save it to $ for a shorthand selector
 		
@@ -30,17 +30,16 @@ router.get('/scrape', function(req, res) {
         var titlesArray = [];
 		
     // Grab every article
-	
-        $('.ul.col li a').each(function(i, element) {
+        $('.content article-list').each(function(i, element) {
 			
     // Save an empty result object
-	
+           
             var result = {};
 
     // Add the text and href of every link, and save them as properties of the result object
 	
-            result.title = $(this).children("div").children("h2").text();
-            result.link = $(this).attr("href");
+            result.title = $(this).Children('h4').children('a').text();
+            result.link = $(this).Children('h4').children('a').attr("href");
 
     //ensures that no empty title or links are sent to mongodb
 	
@@ -162,11 +161,11 @@ router.get('/readArticle/:id', function(req, res){
 
           //$('. card-content ').each(function(i, element){
 			  
-			  $('.article-main-component__columns').each(function(i, element){
+			  $('.archive-item-component__info').each(function(i, element){
 			  
             //hbsObj.body = $(this).children('.c-entry-content').children('p').text();
 			
-			hbsObj.body = $(this).children('div').children('div').children('p').text();
+			hbsObj.body = $(this).children('a').children('p.archive-item-component__desc').text();
 			
             //send article body and comments to article.handlbars through hbObj
             res.render('article', hbsObj);
